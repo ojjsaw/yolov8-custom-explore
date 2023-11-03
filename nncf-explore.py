@@ -7,11 +7,10 @@ import nncf
 import openvino as ov
 from PIL import Image
 
-TEST_IMGS_DIR_PATH="test/images"
+TEST_IMGS_DIR_PATH="train/images"
 OV_FP32_MODEL_XML_PATH="models/original_openvino_model/original.xml"
 TARGET_W=416
 TARGET_H=416
-LEN_OF_DATASET=10
 
 class CustomImageDataset(Dataset):
     def __init__(self, directory, transform=None):
@@ -45,13 +44,19 @@ calibration_dataset = nncf.Dataset(calibration_loader, transform_fn)
 
 # load fp32 ov model and quantize
 model = ov.Core().read_model(OV_FP32_MODEL_XML_PATH)
+print("Quantizing with the number of images provided. Min. 300 recommended")
 quantized_model = nncf.quantize(model, 
-                                calibration_dataset, 
-                                subset_size=LEN_OF_DATASET, 
+                                calibration_dataset,
                                 target_device=nncf.TargetDevice.CPU,
                                 preset=nncf.QuantizationPreset.MIXED,
                                 ignored_scope=nncf.IgnoredScope(
                                         types=["Multiply", "Subtract", "Sigmoid"],  # ignore operations
+                                        names=[
+                                            "/model.22/dfl/conv/Conv",           # in the post-processing subgraph
+                                            "/model.22/Add",
+                                            "/model.22/Add_1",
+                                            "/model.22/Add_2",
+                                        ]
                                     )
                                 )
 

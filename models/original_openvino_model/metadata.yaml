@@ -1,14 +1,14 @@
 description: Ultralytics original model trained on /content/datasets/Hard-Hat-Sample-2/data.yaml
 author: Ultralytics
 license: AGPL-3.0 https://ultralytics.com/license
-date: '2023-11-03T03:50:04.911287'
+date: '2023-11-03T04:34:27.007725'
 version: 8.0.204
 stride: 32
 task: detect
 batch: 1
 imgsz:
-- 800
-- 800
+- 416
+- 416
 names:
   0: head
   1: helmet

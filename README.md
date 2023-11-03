@@ -10,6 +10,10 @@ sudo apt-get install ffmpeg libsm6 libxext6  -y
 ### Yolov8 Object Detection
 * Used RoboFlow for dataset
 * Used Google Colab to train - 3 epochs - labels: head, helmet, person
+* Predict original model in Yolo
+    ```sh
+    yolo predict model="models/original.pt" source='test/images/000008_jpg.rf.COFigDuPuObOGpfjmTy4.jpg' imgsz=416 save_txt
+    ```
 * Convert Yolov8 model to IR
     ```sh
     python convert-to-ir.py
